@@ -1,0 +1,177 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100vh - 80px);
+  padding: 2rem 1.5rem;
+  background-color: #05050a;
+  background-image: 
+    radial-gradient(circle at 50% 50%, rgba(255, 0, 85, 0.08) 0%, transparent 60%),
+    linear-gradient(rgba(0, 240, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 240, 255, 0.04) 1px, transparent 1px);
+  background-size: 100% 100%, 30px 30px, 30px 30px;
+  font-family: 'Consolas', 'Fira Code', monospace, sans-serif;
+  box-sizing: border-box;
+}
+
+h2 {
+  color: #00f0ff;
+  font-size: 2.2rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  text-shadow: 0 0 10px rgba(0, 240, 255, 0.6);
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+form {
+  width: 100%;
+  max-width: 500px;
+  background: #0a0a12;
+  border: 1px solid #00f0ff;
+  clip-path: polygon(0 0, calc(100% - 20px) 0, 100% 20px, 100% 100%, 20px 100%, 0 calc(100% - 20px));
+  padding: 2.5rem;
+  box-shadow: 0 0 20px rgba(0, 240, 255, 0.25), inset 0 0 15px rgba(0, 240, 255, 0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+form::before {
+  content: 'MSG.SEND//2026';
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 0.65rem;
+  color: #ff0055;
+  letter-spacing: 2px;
+}
+
+form:hover {
+  border-color: #ff0055;
+  box-shadow: 0 0 30px rgba(255, 0, 85, 0.4), inset 0 0 20px rgba(255, 0, 85, 0.1);
+}
+
+label {
+  color: #ff0055;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  text-shadow: 0 0 5px rgba(255, 0, 85, 0.5);
+  margin-bottom: -0.5rem;
+}
+
+input, textarea {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(0, 240, 255, 0.3);
+  border-radius: 0;
+  padding: 0.85rem 1rem;
+  color: #ffffff;
+  font-size: 0.95rem;
+  font-family: inherit;
+  box-sizing: border-box;
+  outline: none;
+  transition: all 0.25s ease;
+}
+
+input:focus, textarea:focus {
+  border-color: #ffe600;
+  background: rgba(255, 230, 0, 0.05);
+  box-shadow: 0 0 10px rgba(255, 230, 0, 0.3);
+}
+
+textarea {
+  resize: vertical;
+  min-height: 110px;
+}
+
+button[type="submit"] {
+  margin-top: 0.5rem;
+  background: #ffe600;
+  color: #000000;
+  border: none;
+  clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
+  padding: 0.9rem;
+  font-size: 1rem;
+  font-weight: 900;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+button[type="submit"]:hover:not([disabled]) {
+  background: #00f0ff;
+  color: #000000;
+  box-shadow: 0 0 20px rgba(0, 240, 255, 0.9);
+  transform: scale(1.02);
+}
+
+button[type="submit"]:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background: #4a4a5a;
+  color: #888;
+}
+
+/* Alertas Cyberpunk */
+p.ok, p.erro {
+  width: 100%;
+  max-width: 500px;
+  margin-top: 1.25rem;
+  padding: 1rem;
+  font-weight: 700;
+  font-size: 0.9rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  box-sizing: border-box;
+  animation: fadeIn 0.3s ease;
+}
+
+p.ok {
+  background: rgba(0, 240, 255, 0.1);
+  border: 1px solid #00f0ff;
+  color: #00f0ff;
+  box-shadow: 0 0 10px rgba(0, 240, 255, 0.2);
+}
+
+p.erro {
+  background: rgba(255, 0, 85, 0.1);
+  border: 1px solid #ff0055;
+  color: #ff0055;
+  box-shadow: 0 0 10px rgba(255, 0, 85, 0.2);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Agrupamento de campos */
+.field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+/* Texto de erro do campo */
+.field-error {
+  color: #ff0055;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+/* Destaque vermelho nos campos inválidos quando focados ou tocados */
+input.ng-invalid.ng-touched,
+textarea.ng-invalid.ng-touched {
+  border-color: #ff0055 !important;
+  box-shadow: 0 0 8px rgba(255, 0, 85, 0.4) !important;
+}

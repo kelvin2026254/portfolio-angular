@@ -1,1 +1,38 @@
-<p>contato works!</p>
+<h2>Fale comigo</h2>
+
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+
+  <div class="field-group">
+    <label for="nome">Nome *</label>
+    <input id="nome" type="text" formControlName="nome" placeholder="Seu nome completo">
+    @if (form.controls.nome.invalid && form.controls.nome.touched) {
+      <span class="field-error">O campo nome é obrigatório (mínimo 3 caracteres).</span>
+    }
+  </div>
+
+  <!-- Campo E-mail -->
+  <div class="field-group">
+    <label for="email">E-mail *</label>
+    <input id="email" type="email" formControlName="email" placeholder="seuemail@exemplo.com">
+    @if (form.controls.email.invalid && form.controls.email.touched) {
+      <span class="field-error">Insira um e-mail válido.</span>
+    }
+  </div>
+
+  <!-- Campo Mensagem -->
+  <div class="field-group">
+    <label for="mensagem">Mensagem *</label>
+    <textarea id="mensagem" formControlName="mensagem" rows="4" placeholder="Escreva sua mensagem aqui..."></textarea>
+    @if (form.controls.mensagem.invalid && form.controls.mensagem.touched) {
+      <span class="field-error">A mensagem é obrigatória (mínimo 10 caracteres).</span>
+    }
+  </div>
+
+  <button type="submit" [disabled]="enviando">
+    {{ enviando ? 'Enviando...' : 'Enviar' }}
+  </button>
+</form>
+
+<!-- Estados de retorno -->
+@if (sucesso) { <p class="ok">{{ sucesso }}</p> }
+@if (erro)    { <p class="erro">{{ erro }}</p> }

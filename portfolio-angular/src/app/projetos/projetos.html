@@ -1,24 +1,54 @@
-@if (carregando) {
-  <p>Carregando projetos...</p>
-}
-@if (erro) {
-  <p>{{ erro }}</p>
-}
-@if (!carregando && projetos.length === 0) {
-  <p>Nenhum projeto publicado ainda.</p>
-}
+<link rel="stylesheet" href="./projetos.css">
 
-@for (p of projetos; track p.id) {
-  <mat-card style="margin-bottom: 12px;">
-    <mat-card-header>
-      <mat-card-title>{{ p.nome }}</mat-card-title>
-      <mat-card-subtitle>{{ p.tecnologias }} - {{ p.ano }}</mat-card-subtitle>
-    </mat-card-header>
-    <mat-card-content>{{ p.descricao }}</mat-card-content>
-<mat-card-actions>
-  @if (p.link_github) {
-    <a mat-button [href]="p.link_github" target="_blank" rel="noopener">Ver no GitHub</a>
+
+<main class="projetos-container">
+  <div class="header-section">
+    <span class="header-tag">Portfólio</span>
+    <h2>Meus Projetos</h2>
+    <p class="subtitle">Confira algumas das aplicações e soluções que desenvolvi.</p>
+  </div>
+
+  @if (carregando) {
+    <div class="state-message">
+      <div class="spinner"></div>
+      <p>Carregando projetos...</p>
+    </div>
   }
-</mat-card-actions>
-  </mat-card>
-}
+
+  @if (erro) {
+    <div class="state-message error">
+      <p>{{ erro }}</p>
+    </div>
+  }
+
+  @if (!carregando && !erro && projetos.length === 0) {
+    <div class="state-message">
+      <p>Nenhum projeto publicado ainda.</p>
+    </div>
+  }
+
+  @if (!carregando && !erro && projetos.length > 0) {
+    <div class="projects-grid">
+      @for (p of projetos; track p.id) {
+        <mat-card class="project-card">
+          <mat-card-header>
+            <mat-card-title>{{ p.nome }}</mat-card-title>
+            <mat-card-subtitle>{{ p.tecnologias }} • {{ p.ano }}</mat-card-subtitle>
+          </mat-card-header>
+
+          <mat-card-content>
+            <p>{{ p.descricao }}</p>
+          </mat-card-content>
+
+          <mat-card-actions>
+            @if (p.link_github) {
+              <a mat-button [href]="p.link_github" target="_blank" rel="noopener" class="btn-github">
+                Ver no GitHub
+              </a>
+            }
+          </mat-card-actions>
+        </mat-card>
+      }
+    </div>
+  }
+</main>

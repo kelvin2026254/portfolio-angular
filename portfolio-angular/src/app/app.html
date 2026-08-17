@@ -1,12 +1,29 @@
-<mat-toolbar color="primary">
-  <span>Meu Portfólio</span>
-  <span class="espacador"></span>
-  <a mat-button routerLink="/" routerLinkActive="ativo" [routerLinkActiveOptions]="{ exact: true }">Home</a>
-  <a mat-button routerLink="/sobre" routerLinkActive="ativo">Sobre</a>
-  <a mat-button routerLink="/projetos" routerLinkActive="ativo">Projetos</a>
-  <a mat-button routerLink="/contato" routerLinkActive="ativo">Contato</a>
-</mat-toolbar>
+HTML
+<header class="navbar">
+  <div class="logo">Meu Portfólio</div>
+  
+  <button class="menu-btn" (click)="toggleMenu()" aria-label="Abrir menu">
+    <span class="bar"></span>
+    <span class="bar"></span>
+    <span class="bar"></span>
+  </button>
+</header>
 
-<main style="padding: 24px;">
-  <router-outlet></router-outlet>
-</main>
+<div class="backdrop" [class.active]="menuAberto" (click)="fecharMenu()"></div>
+
+<nav class="sidebar" [class.open]="menuAberto">
+  <div class="sidebar-header">
+    <span>Navegação</span>
+    <button class="close-btn" (click)="fecharMenu()">&times;</button>
+  </div>
+
+  <div class="nav-links">
+    <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" (click)="fecharMenu()">Home</a>
+    <a routerLink="/sobre" routerLinkActive="active" (click)="fecharMenu()">Sobre</a>
+    <a routerLink="/projetos" routerLinkActive="active" (click)="fecharMenu()">Projetos</a>
+    <a routerLink="/catalogo" routerLinkActive="active" (click)="fecharMenu()">Catálogo</a>
+    <a routerLink="/contato" routerLinkActive="active" (click)="fecharMenu()">Contato</a>
+  </div>
+</nav>
+
+<router-outlet></router-outlet>

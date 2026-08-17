@@ -1,6 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
-import { TecnologiaService, Tecnologia } from '../projetos/tecnologia.service';
+import { TecnologiaService, Tecnologia } from '../tecnologia.service';
 
 @Component({
   selector: 'app-catalogo',
