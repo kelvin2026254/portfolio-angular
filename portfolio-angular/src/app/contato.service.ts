@@ -21,7 +21,7 @@ export interface RespostaContato {
 export class ContatoService {
   private http = inject(HttpClient);
 
-  private url = 'https://reimagined-broccoli-r7rpr5x4wj64hxjw9-8000.app.github.dev/api/contato.php';
+ private url = 'https://reimagined-broccoli-r7rpr5x4wj64hxjw9-8000.app.github.dev/api/contato.php';
 
   enviar(dados: NovoContato): Observable<RespostaContato> {
     const headers = new HttpHeaders({

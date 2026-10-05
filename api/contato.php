@@ -1,12 +1,13 @@
 <?php
+
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: POST, OPTIONS');
 header('Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With');
 header('Content-Type: application/json; charset=utf-8');
 
-if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') { 
-    http_response_code(200); 
-    exit; 
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(200);
+    exit;
 }
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
@@ -21,29 +22,41 @@ $nome = trim($dados['nome'] ?? '');
 $email = trim($dados['email'] ?? '');
 $mensagem = trim($dados['mensagem'] ?? '');
 
-$erros = [];
-if ($nome === '') $erros[] = 'O nome e obrigatorio.';
-if ($email === '') $erros[] = 'O e-mail e obrigatorio.';
-elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) $erros[] = 'O e-mail e invalido.';
-if (strlen($mensagem) < 10) {
-    $erros[] = 'A mensagem precisa ter pelo menos 10 caracteres.';
-}
-
-if (!empty($erros)) {
+if ($nome === '' || $email === '' || strlen($mensagem) < 10) {
     http_response_code(400);
-    echo json_encode(['erros' => $erros]);
+    echo json_encode([
+        'erros' => ['Preencha todos os campos corretamente.']
+    ]);
     exit;
 }
 
-require __DIR__ . '/../conexao.php';
+try {
 
-$sql = 'INSERT INTO contatos (nome, email, mensagem) VALUES (:nome, :email, :mensagem)';
-$stmt = $pdo->prepare($sql);
-$stmt->execute([':nome' => $nome, ':email' => $email, ':mensagem' => $mensagem]);
+    require __DIR__ . '/../conexao.php';
 
-http_response_code(201);
-echo json_encode([
-    'sucesso'  => true,
-    'id'       => (int) $pdo->lastInsertId(),
-    'mensagem' => 'Contato recebido com sucesso!'
-]);
+    $stmt = $pdo->prepare(
+        'INSERT INTO contatos (nome, email, mensagem)
+         VALUES (:nome, :email, :mensagem)'
+    );
+
+    $stmt->execute([
+        ':nome' => $nome,
+        ':email' => $email,
+        ':mensagem' => $mensagem
+    ]);
+
+    echo json_encode([
+        'sucesso' => true,
+        'id' => (int) $pdo->lastInsertId(),
+        'mensagem' => 'Contato recebido com sucesso!'
+    ]);
+
+} catch (PDOException $e) {
+
+    http_response_code(500);
+
+    echo json_encode([
+        'sucesso' => false,
+        'erro' => $e->getMessage()
+    ]);
+}

@@ -1,0 +1,344 @@
+/* ================================
+   CATÁLOGO
+================================ */
+
+.catalogo {
+  min-height: 100vh;
+  padding: 70px 8%;
+  position: relative;
+  overflow: hidden;
+
+  background:
+    radial-gradient(circle at 10% 20%, rgba(139, 92, 246, 0.18), transparent 30%),
+    radial-gradient(circle at 90% 80%, rgba(34, 211, 238, 0.15), transparent 30%),
+    linear-gradient(135deg, #080812, #111122 50%, #080812);
+
+  color: #fff;
+}
+
+/* ================================
+   EFEITOS DE FUNDO
+================================ */
+
+.catalogo::before,
+.catalogo::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  pointer-events: none;
+  animation: flutuar 8s ease-in-out infinite alternate;
+}
+
+.catalogo::before {
+  width: 280px;
+  height: 280px;
+  top: 5%;
+  left: -100px;
+  background: rgba(139, 92, 246, 0.18);
+}
+
+.catalogo::after {
+  width: 300px;
+  height: 300px;
+  bottom: -100px;
+  right: -80px;
+  background: rgba(34, 211, 238, 0.15);
+  animation-delay: 2s;
+}
+
+/* ================================
+   CABEÇALHO
+================================ */
+
+.catalogo-header {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+.header-tag {
+  display: inline-block;
+  margin-bottom: 15px;
+  padding: 7px 16px;
+
+  border: 1px solid rgba(139, 92, 246, 0.5);
+  border-radius: 30px;
+
+  background: rgba(139, 92, 246, 0.1);
+  color: #c4b5fd;
+
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+
+  box-shadow: 0 0 20px rgba(139, 92, 246, 0.15);
+}
+
+/* ================================
+   TÍTULO
+================================ */
+
+.catalogo h2 {
+  position: relative;
+
+  margin: 0 0 15px;
+  padding: 8px 0;
+
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  line-height: 1.2;
+  font-weight: 800;
+
+  background: linear-gradient(
+    90deg,
+    #ffffff,
+    #a78bfa,
+    #22d3ee,
+    #ffffff
+  );
+
+  background-size: 250% auto;
+
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  overflow: visible;
+
+  animation: brilhoTitulo 5s linear infinite;
+}
+
+/* ================================
+   SUBTÍTULO
+================================ */
+
+.catalogo-header p {
+  max-width: 650px;
+  margin: 0 auto;
+
+  color: #a1a1b5;
+
+  font-size: 1.05rem;
+  line-height: 1.7;
+}
+
+/* ================================
+   GRID
+================================ */
+
+.catalogo {
+  display: block;
+}
+
+.catalogo > mat-card {
+  position: relative;
+  z-index: 1;
+
+  margin-bottom: 25px;
+  padding: 5px;
+
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+
+  background: rgba(255, 255, 255, 0.045);
+
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+
+  box-shadow:
+    0 15px 40px rgba(0, 0, 0, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+
+  overflow: hidden;
+
+  transition:
+    transform 0.4s ease,
+    box-shadow 0.4s ease,
+    border-color 0.4s ease;
+
+  animation: aparecer 0.7s ease both;
+}
+
+/* brilho passando pelo card */
+
+.catalogo > mat-card::before {
+  content: "";
+  position: absolute;
+
+  top: 0;
+  left: -120%;
+
+  width: 80%;
+  height: 100%;
+
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.08),
+    transparent
+  );
+
+  transform: skewX(-20deg);
+
+  transition: left 0.7s ease;
+}
+
+.catalogo > mat-card:hover::before {
+  left: 140%;
+}
+
+.catalogo > mat-card:hover {
+  transform: translateY(-8px) scale(1.01);
+
+  border-color: rgba(139, 92, 246, 0.45);
+
+  box-shadow:
+    0 25px 60px rgba(0, 0, 0, 0.4),
+    0 0 30px rgba(139, 92, 246, 0.12);
+}
+
+/* ================================
+   CABEÇALHO DO CARD
+================================ */
+
+.catalogo mat-card-header {
+  padding: 25px 25px 15px;
+}
+
+.catalogo mat-card-title {
+  color: #ffffff !important;
+
+  font-size: 1.35rem !important;
+  font-weight: 700 !important;
+
+  margin-bottom: 8px;
+}
+
+.catalogo mat-card-subtitle {
+  color: #a78bfa !important;
+
+  font-size: 0.9rem !important;
+  font-weight: 600 !important;
+
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* ================================
+   DESCRIÇÃO
+================================ */
+
+.catalogo mat-card-content {
+  padding: 5px 25px 25px !important;
+
+  color: #b8b8c9;
+
+  font-size: 0.98rem;
+  line-height: 1.7;
+}
+
+/* ================================
+   LOADING
+================================ */
+
+.catalogo > p {
+  position: relative;
+  z-index: 1;
+
+  text-align: center;
+  color: #aaaabe;
+}
+
+.catalogo .carregando {
+  text-align: center;
+}
+
+/* ================================
+   ANIMAÇÕES
+================================ */
+
+@keyframes brilhoTitulo {
+  0% {
+    background-position: 0% center;
+  }
+
+  100% {
+    background-position: 250% center;
+  }
+}
+
+@keyframes flutuar {
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+
+  50% {
+    transform: translate(30px, -20px) scale(1.05);
+  }
+
+  100% {
+    transform: translate(-20px, 30px) scale(0.95);
+  }
+}
+
+@keyframes aparecer {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ================================
+   RESPONSIVO
+================================ */
+
+@media (max-width: 768px) {
+  .catalogo {
+    padding: 50px 5%;
+  }
+
+  .catalogo h2 {
+    font-size: 2.3rem;
+    padding: 10px 0;
+  }
+
+  .catalogo-header {
+    margin-bottom: 35px;
+  }
+
+  .catalogo > mat-card {
+    border-radius: 16px;
+  }
+
+  .catalogo mat-card-header {
+    padding: 20px 20px 12px;
+  }
+
+  .catalogo mat-card-content {
+    padding: 5px 20px 20px !important;
+  }
+}
+
+/* ================================
+   ACESSIBILIDADE
+================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .catalogo::before,
+  .catalogo::after,
+  .catalogo h2,
+  .catalogo > mat-card {
+    animation: none;
+  }
+
+  .catalogo > mat-card {
+    transition: none;
+  }
+}
