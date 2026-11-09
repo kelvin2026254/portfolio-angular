@@ -379,3 +379,36 @@ hr {
     animation-duration: 0.01ms !important;
   }
 }
+
+.contato {
+  margin-top: 32px;
+}
+
+label {
+  display: block;
+  margin: 0 0 12px;
+  font-weight: bold;
+}
+
+input,
+textarea {
+  display: block;
+  width: 100%;
+  margin-top: 4px;
+  padding: 8px;
+}
+
+button {
+  background-color: #3b579d;
+  color: #ffffff;
+  border: 0;
+  border-radius: 6px;
+  padding: 10px 16px;
+  cursor: pointer;
+}
+
+.aviso {
+  color: #e27d32;
+  font-weight: bold;
+}
+
