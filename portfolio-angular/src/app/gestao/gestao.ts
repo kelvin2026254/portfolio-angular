@@ -1,51 +1,116 @@
-import { Component, inject, OnInit } from '@angular/core';
-import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
+import { Component, OnInit, ChangeDetectorRef, NgZone } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators
+} from '@angular/forms';
+
 import { ProjetoService, Projeto } from '../projeto.service';
 
 @Component({
   selector: 'app-gestao',
-  imports: [ReactiveFormsModule],
+  standalone: true,
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './gestao.html',
-  styleUrl: './gestao.css'
+  styleUrls: ['./gestao.css']
 })
 export class Gestao implements OnInit {
-  private service = inject(ProjetoService);
-
+  form: FormGroup;
   projetos: Projeto[] = [];
-  carregando = true;
+
+  salvando = false;
   erro = '';
   editandoId: number | null = null;
-  salvando = false;
 
-  form = new FormGroup({
-    nome: new FormControl('', [Validators.required, Validators.minLength(3)]),
-    descricao: new FormControl(''),
-    tecnologias: new FormControl(''),
-    link_github: new FormControl(''),
-    ano: new FormControl(2026, [Validators.required])
-  });
-
-  ngOnInit() {
-    this.carregar();
+  constructor(
+    private fb: FormBuilder,
+    private service: ProjetoService,
+    private cdr: ChangeDetectorRef,
+    private zone: NgZone
+  ) {
+    this.form = this.fb.group({
+      nome: ['', [Validators.required, Validators.minLength(3)]],
+      descricao: [''],
+      tecnologias: [''],
+      link_github: [''],
+      ano: [
+        new Date().getFullYear(),
+        [Validators.required, Validators.min(1900)]
+      ]
+    });
   }
 
-  carregar() {
-    this.carregando = true;
+  ngOnInit(): void {
+    this.carregarProjetos();
+  }
+
+  carregarProjetos(): void {
     this.erro = '';
 
     this.service.listar().subscribe({
-      next: (lista) => {
-        this.projetos = lista;
-        this.carregando = false;
+      next: (dados: Projeto[]) => {
+        this.zone.run(() => {
+          this.projetos = [...dados];
+          this.cdr.detectChanges();
+        });
       },
-      error: () => {
-        this.erro = 'Nao foi possivel carregar os projetos.';
-        this.carregando = false;
+      error: (erro: unknown) => {
+        console.error('Erro ao carregar projetos:', erro);
+
+        this.zone.run(() => {
+          this.erro = 'Não foi possível carregar os projetos.';
+          this.cdr.detectChanges();
+        });
       }
     });
   }
 
-  editar(p: Projeto) {
+  salvar(): void {
+    if (this.form.invalid || this.salvando) {
+      this.form.markAllAsTouched();
+      return;
+    }
+
+    this.salvando = true;
+    this.erro = '';
+
+    const dados = this.form.getRawValue();
+
+    const finalizar = (): void => {
+      this.salvando = false;
+      this.cancelarEdicao();
+      this.carregarProjetos();
+      this.cdr.detectChanges();
+    };
+
+    const falhar = (erro: unknown): void => {
+      console.error('Erro ao salvar projeto:', erro);
+      this.erro = 'Não foi possível salvar o projeto.';
+      this.salvando = false;
+      this.cdr.detectChanges();
+    };
+
+    if (this.editandoId !== null) {
+      this.service.atualizar(this.editandoId, dados).subscribe({
+        next: () => finalizar(),
+        error: (erro: unknown) => falhar(erro)
+      });
+    } else {
+      this.service.adicionar(dados).subscribe({
+        next: () => finalizar(),
+        error: (erro: unknown) => falhar(erro)
+      });
+    }
+  }
+
+  editar(p: Projeto): void {
+    if (this.salvando) {
+      return;
+    }
+
+    this.erro = '';
     this.editandoId = p.id;
 
     this.form.patchValue({
@@ -56,113 +121,55 @@ export class Gestao implements OnInit {
       ano: p.ano
     });
 
-    this.erro = '';
+    this.cdr.detectChanges();
   }
 
-  salvar() {
-    if (this.form.invalid) {
-      this.form.markAllAsTouched();
-      return;
-    }
-
-    this.salvando = true;
-    this.erro = '';
-
-    const dados = this.form.getRawValue() as Projeto;
-
-    if (this.editandoId !== null) {
-      this.service.atualizar(this.editandoId, dados).subscribe({
-        next: () => {
-          this.salvando = false;
-
-          const projetoAtualizado: Projeto = {
-            ...dados,
-            id: this.editandoId!
-          };
-
-          this.projetos = this.projetos.map(p =>
-            p.id === this.editandoId ? projetoAtualizado : p
-          );
-
-          this.form.reset({
-            nome: '',
-            descricao: '',
-            tecnologias: '',
-            link_github: '',
-            ano: 2026
-          });
-
-          this.editandoId = null;
-        },
-        error: () => {
-          this.salvando = false;
-          this.erro = 'Nao foi possivel salvar. Tente de novo.';
-        }
-      });
-
-    } else {
-      this.service.criar(dados).subscribe({
-        next: (resposta) => {
-          this.salvando = false;
-
-          const novoProjeto: Projeto = {
-            ...dados,
-            id: resposta.id
-          };
-
-          this.projetos = [novoProjeto, ...this.projetos];
-
-          this.form.reset({
-            nome: '',
-            descricao: '',
-            tecnologias: '',
-            link_github: '',
-            ano: 2026
-          });
-        },
-        error: () => {
-          this.salvando = false;
-          this.erro = 'Nao foi possivel salvar. Tente de novo.';
-        }
-      });
-    }
-  }
-
-  excluir(p: Projeto) {
-    if (!p.id) {
-      return;
-    }
-
-    if (!confirm(`Excluir o projeto "${p.nome}"? Esta acao nao pode ser desfeita.`)) {
-      return;
-    }
-
-    this.erro = '';
-
-    this.service.excluir(p.id).subscribe({
-      next: () => {
-        this.projetos = this.projetos.filter(x => x.id !== p.id);
-
-        if (this.editandoId === p.id) {
-          this.cancelarEdicao();
-        }
-      },
-      error: () => {
-        this.erro = 'Nao foi possivel excluir. Tente de novo.';
-      }
-    });
-  }
-
-  cancelarEdicao() {
+  cancelarEdicao(): void {
     this.editandoId = null;
-    this.erro = '';
 
     this.form.reset({
       nome: '',
       descricao: '',
       tecnologias: '',
       link_github: '',
-      ano: 2026
+      ano: new Date().getFullYear()
+    });
+
+    this.cdr.detectChanges();
+  }
+
+  excluir(p: Projeto): void {
+    if (p.id == null || this.salvando) {
+      return;
+    }
+
+    const id = p.id;
+    const projetosAnteriores = [...this.projetos];
+
+    this.erro = '';
+
+    this.projetos = this.projetos.filter(
+      projeto => projeto.id !== id
+    );
+
+    if (this.editandoId === id) {
+      this.cancelarEdicao();
+    }
+
+    this.cdr.detectChanges();
+
+    this.service.excluir(id).subscribe({
+      next: () => {
+        this.carregarProjetos();
+      },
+      error: (erro: unknown) => {
+        console.error('Erro ao excluir projeto:', erro);
+
+        this.projetos = projetosAnteriores;
+        this.erro = 'Não foi possível excluir o projeto.';
+        this.cdr.detectChanges();
+      }
     });
   }
 }
+

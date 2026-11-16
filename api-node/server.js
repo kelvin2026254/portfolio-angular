@@ -38,7 +38,6 @@ app.get('/', (req, res) => {
     res.send('API do Portfolio em Node: no ar');
 });
 
-// Lista os projetos publicamente
 app.get('/api/projetos', async (req, res) => {
     try {
         const sql = `
@@ -53,7 +52,6 @@ app.get('/api/projetos', async (req, res) => {
     }
 });
 
-// Busca um projeto pelo ID
 app.get('/api/projetos/:id', async (req, res) => {
     try {
         const sql = `
@@ -74,7 +72,6 @@ app.get('/api/projetos/:id', async (req, res) => {
     }
 });
 
-// Adiciona projeto: exige autenticação
 app.post('/api/projetos', autenticar, async (req, res) => {
     try {
         const dados = req.body;
@@ -106,7 +103,6 @@ app.post('/api/projetos', autenticar, async (req, res) => {
     }
 });
 
-// Edita projeto: exige autenticação
 app.put('/api/projetos/:id', autenticar, async (req, res) => {
     try {
         const dados = req.body;
@@ -143,7 +139,6 @@ app.put('/api/projetos/:id', autenticar, async (req, res) => {
     }
 });
 
-// Exclui projeto: exige autenticação
 app.delete('/api/projetos/:id', autenticar, async (req, res) => {
     try {
         const [resultado] = await pool.execute(
@@ -162,7 +157,6 @@ app.delete('/api/projetos/:id', autenticar, async (req, res) => {
     }
 });
 
-// Lista tecnologias publicamente
 app.get('/api/tecnologias', async (req, res) => {
     try {
         const sql = `
@@ -177,7 +171,6 @@ app.get('/api/tecnologias', async (req, res) => {
     }
 });
 
-// Login: não exige token
 app.post('/api/login', async (req, res) => {
     try {
         const dados = req.body;
