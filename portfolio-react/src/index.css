@@ -15,7 +15,14 @@
   --heading: system-ui, "Segoe UI", Roboto, sans-serif;
   --mono: ui-monospace, Consolas, monospace;
   --transition: 0.25s ease;
+.erro {
+  color: #b91c1c;
+  font-weight: bold;
+}
 
+.catalogo {
+  margin-top: 32px;
+}
   font-family: var(--sans);
   font-size: 18px;
   line-height: 1.6;

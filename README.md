@@ -1,5 +1,26 @@
 # portfolio-angular
 
+### Aula 27: Os projetos vêm da API
+
+O front-end busca os projetos e o catálogo de tecnologias diretamente na API em Node.js, utilizando `fetch` dentro de `useEffect`.
+
+O endereço da API fica centralizado no arquivo `portfolio-react/src/api.js`.
+
+O arquivo `portfolio-react/src/projetos.js` foi removido, pois os dados dos projetos agora vêm do banco de dados por meio da API.
+
+Para visualizar os dados, é necessário iniciar o MariaDB e o servidor Node.js. A porta 3000 da API deve estar configurada como **Public** no Codespace.
+
+**Comandos para iniciar:**
+
+```bash
+sudo service mariadb start
+cd api-node
+export JWT_SECRET="teste"
+node server.js
+```
+
+Com a API em execução, o front-end React consegue buscar e exibir os projetos e as tecnologias.
+
 ### Aula 26: estado, lista e formulário
 
 Os projetos saíram do `App.jsx` e moram em `src/projetos.js`. A tela os desenha com `map`.
